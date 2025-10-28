@@ -1,0 +1,130 @@
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id>AccesibilidadHTML</id>
+          </State>
+          <State>
+            <id>Archivos de propiedades</id>
+          </State>
+          <State>
+            <id>Construcciones de código detalladas o redundantesJava</id>
+          </State>
+          <State>
+            <id>EditorConfig</id>
+          </State>
+          <State>
+            <id>EmbebidosRendimientoJava</id>
+          </State>
+          <State>
+            <id>Errores probablesJava</id>
+          </State>
+          <State>
+            <id>General</id>
+          </State>
+          <State>
+            <id>HTML</id>
+          </State>
+          <State>
+            <id>InicializaciónJava</id>
+          </State>
+          <State>
+            <id>Internacionalización</id>
+          </State>
+          <State>
+            <id>Inyección de lenguaje</id>
+          </State>
+          <State>
+            <id>JSON y JSON5</id>
+          </State>
+          <State>
+            <id>Java</id>
+          </State>
+          <State>
+            <id>Java 10Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 11Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 14Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 15Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 16Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 21Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 5Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 7Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 8Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java 9Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>Kotlin</id>
+          </State>
+          <State>
+            <id>Lenguajes JVM</id>
+          </State>
+          <State>
+            <id>MigraciónKotlin</id>
+          </State>
+          <State>
+            <id>Plugin DevKit</id>
+          </State>
+          <State>
+            <id>Problemas de compilaciónJava</id>
+          </State>
+          <State>
+            <id>Problemas de estiloKotlin</id>
+          </State>
+          <State>
+            <id>Problemas de modularizaciónJava</id>
+          </State>
+          <State>
+            <id>Problemas numéricosJava</id>
+          </State>
+          <State>
+            <id>Problemas y ayudas de migración específicos del nivel de lenguaje Java 23Java ayuda de migración de nivel de idiomaJava</id>
+          </State>
+          <State>
+            <id>RendimientoJava</id>
+          </State>
+          <State>
+            <id>TestNGJava</id>
+          </State>
+          <State>
+            <id>descriptor del pluginPlugin DevKit</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Definido por el usuario</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_21" default="true" project-jdk-name="jbr-21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
