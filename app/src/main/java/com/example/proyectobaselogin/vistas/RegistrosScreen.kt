@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +61,7 @@ fun RegistrosScreen() {
                 maxValue = maxConsumo,
                 primaryColor = MaterialTheme.colorScheme.primary,
                 surfaceColor = MaterialTheme.colorScheme.onSurface,
+                textColor = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.fillMaxSize()
             )
         }
@@ -83,6 +86,7 @@ fun BarChart(
     maxValue: Float,
     primaryColor: androidx.compose.ui.graphics.Color,
     surfaceColor: androidx.compose.ui.graphics.Color,
+    textColor: androidx.compose.ui.graphics.Color = Color.Black,
     modifier: Modifier = Modifier
 ) {
     Canvas(modifier = modifier) {
@@ -91,7 +95,7 @@ fun BarChart(
         val chartBottom = size.height - 50f
         val spacing = barWidth
         val paint = android.graphics.Paint().apply {
-            color = android.graphics.Color.BLACK
+            color = textColor.toArgb()
             textSize = 30f
             textAlign = android.graphics.Paint.Align.CENTER
         }

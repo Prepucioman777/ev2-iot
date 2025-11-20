@@ -3,12 +3,17 @@ package com.example.proyectobaselogin.vistas
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bluetooth
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -27,6 +32,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.proyectobaselogin.bluetooth.BluetoothManager
@@ -50,12 +56,14 @@ fun PrincipalScreen() {
     
     // Estado del consumo actual (se actualiza desde Arduino)
     var consumoActual by remember { mutableFloatStateOf(0.1f) }
-    // Meta de consumo en amperios
-    val metaConsumo = 0.15f
+    // Meta de consumo en amperios (ahora es mutable)
+    var metaConsumo by remember { mutableFloatStateOf(0.15f) }
     // Estado de conexión Bluetooth
     var isConnected by remember { mutableStateOf(false) }
     // Estado de permisos
     var hasPermissions by remember { mutableStateOf(false) }
+    // Estado para mostrar/ocultar el diálogo de ajuste de meta
+    var showMetaDialog by remember { mutableStateOf(false) }
     // Porcentaje del consumo respecto a la meta
     val porcentaje = (consumoActual / metaConsumo).coerceAtMost(1f)
     
@@ -204,6 +212,26 @@ fun PrincipalScreen() {
             Text(if (isConnected) "Desconectar Arduino" else "Conectar Arduino")
         }
         
+        Spacer(modifier = Modifier.height(16.dp))
+        
+        // Botón para ajustar la meta diaria
+        Button(
+            onClick = {
+                showMetaDialog = true
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(50.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = "Editar",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Ajustar Meta Diaria")
+        }
+        
         if (!hasPermissions) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -242,9 +270,93 @@ fun PrincipalScreen() {
                 )
             }
         }
+        
+        // Diálogo para ajustar la meta diaria
+        if (showMetaDialog) {
+            MetaDialog(
+                metaActual = metaConsumo,
+                onDismiss = { showMetaDialog = false },
+                onConfirm = { nuevaMeta ->
+                    if (nuevaMeta > 0) {
+                        metaConsumo = nuevaMeta
+                        Toast.makeText(context, "Meta actualizada a ${String.format("%.2f", nuevaMeta)}A", Toast.LENGTH_SHORT).show()
+                    }
+                    showMetaDialog = false
+                }
+            )
+        }
     }
 }
 
+/**
+ * Diálogo para ajustar la meta diaria de consumo
+ */
+@Composable
+fun MetaDialog(
+    metaActual: Float,
+    onDismiss: () -> Unit,
+    onConfirm: (Float) -> Unit
+) {
+    var metaTexto by remember { mutableStateOf(String.format("%.2f", metaActual)) }
+    
+    // Actualizar el texto cuando cambia la meta actual
+    LaunchedEffect(metaActual) {
+        metaTexto = String.format("%.2f", metaActual)
+    }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = {
+            Text(
+                text = "Ajustar Meta Diaria",
+                fontWeight = FontWeight.Bold
+            )
+        },
+        text = {
+            Column {
+                Text(
+                    text = "Ingresa la nueva meta de consumo en amperios (A)",
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+                OutlinedTextField(
+                    value = metaTexto,
+                    onValueChange = { nuevoTexto ->
+                        // Permitir solo números y un punto decimal
+                        if (nuevoTexto.matches(Regex("^\\d*\\.?\\d*$"))) {
+                            metaTexto = nuevoTexto
+                        }
+                    },
+                    label = { Text("Meta (A)") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Meta actual: ${String.format("%.2f", metaActual)}A",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val nuevaMeta = metaTexto.toFloatOrNull() ?: 0f
+                    onConfirm(nuevaMeta)
+                }
+            ) {
+                Text("Guardar")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancelar")
+            }
+        }
+    )
+}
 
 /**
  * Componente de barra de progreso circular tipo dona
