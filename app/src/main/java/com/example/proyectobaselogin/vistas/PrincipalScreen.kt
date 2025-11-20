@@ -64,6 +64,8 @@ fun PrincipalScreen() {
     var hasPermissions by remember { mutableStateOf(false) }
     // Estado para mostrar/ocultar el diálogo de ajuste de meta
     var showMetaDialog by remember { mutableStateOf(false) }
+    // Estado para activar/desactivar la simulación de consumo
+    var simularConsumo by remember { mutableStateOf(false) }
     // Porcentaje del consumo respecto a la meta
     val porcentaje = (consumoActual / metaConsumo).coerceAtMost(1f)
     
@@ -107,6 +109,16 @@ fun PrincipalScreen() {
                     }
                 }
                 delay(1000) // Leer cada segundo
+            }
+        }
+    }
+    
+    // Simular consumo cuando está activado (incrementa 0.00002 A por segundo)
+    LaunchedEffect(simularConsumo) {
+        if (simularConsumo) {
+            while (simularConsumo) {
+                consumoActual += 0.00002f
+                delay(1000) // Incrementar cada segundo
             }
         }
     }
@@ -214,6 +226,25 @@ fun PrincipalScreen() {
         
         Spacer(modifier = Modifier.height(16.dp))
         
+        // Botón para simular consumo
+        Button(
+            onClick = {
+                simularConsumo = !simularConsumo
+                if (!simularConsumo) {
+                    Toast.makeText(context, "Simulación detenida", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "Simulación iniciada: +0.00002 A/s", Toast.LENGTH_SHORT).show()
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth(0.8f)
+                .height(50.dp)
+        ) {
+            Text(if (simularConsumo) "Detener Simulación" else "Iniciar Simulación")
+        }
+        
+        Spacer(modifier = Modifier.height(16.dp))
+        
         // Botón para ajustar la meta diaria
         Button(
             onClick = {
@@ -267,6 +298,15 @@ fun PrincipalScreen() {
                     text = "Conectado",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.primary
+                )
+            }
+            
+            if (simularConsumo) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Simulando: +0.00002 A/s",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }
