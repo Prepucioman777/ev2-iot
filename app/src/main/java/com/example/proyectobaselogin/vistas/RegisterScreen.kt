@@ -1,7 +1,6 @@
-package com.example.interfazlogin.vistas
+package com.example.proyectobaselogin.vistas
 
 
-import android.R
 import android.content.Context
 import android.util.Patterns
 import android.widget.Toast
@@ -134,7 +133,7 @@ fun RegisterScreen(navController: NavController, auth: FirebaseAuth) {
     }
 }
 
-private fun ColumnScope.validarRegistro(
+private fun validarRegistro(
     email: String,
     password: String,
     confirm: String,
@@ -145,21 +144,22 @@ private fun ColumnScope.validarRegistro(
     // validar campos vacios
     if (password.isBlank() || email.isBlank() || confirm.isBlank()){
         Toast.makeText(context, "rellena los campos", Toast.LENGTH_SHORT).show()
-
+        return
     }
     //validar el formato del correo
     if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
         Toast.makeText(context, "correo invalido", Toast.LENGTH_SHORT).show()
+        return
     }
 
     if (password.length < 6){
         Toast.makeText(context, "la contraseña es demasiado corta", Toast.LENGTH_SHORT).show()
-
+        return
     }
 
     if (password != confirm){
         Toast.makeText(context, "las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
-
+        return
     }
 
     auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->

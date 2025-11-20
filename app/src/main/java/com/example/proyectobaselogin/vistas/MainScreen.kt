@@ -1,97 +1,95 @@
 package com.example.proyectobaselogin.vistas
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CastForEducation
+import androidx.compose.material.icons.filled.EnergySavingsLeaf
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-//import com.example.interfazlogin.vistas.validarInicioSesion
 
-
+/**
+ * Pantalla principal con barra de navegación inferior funcional
+ * Permite navegar entre tres secciones: Principal, Registros y Educación
+ */
 @Composable
-fun interfazhome(navController: NavHostController) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+fun interfazhome(navController: NavHostController? = null) {
+    // Estado que guarda la sección seleccionada (0=Principal, 1=Registros, 2=Educación)
+    var selectedDestination by rememberSaveable { mutableIntStateOf(Destination.PRINCIPAL.ordinal) }
+
+    Scaffold(
+        bottomBar = {
+            // Barra de navegación inferior con tres secciones
+            NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
+                Destination.entries.forEachIndexed { index, destination ->
+                    NavigationBarItem(
+                        selected = selectedDestination == index,
+                        onClick = { selectedDestination = index },
+                        icon = {
+                            Icon(
+                                destination.icon,
+                                contentDescription = destination.descripcion
+                            )
+                        },
+                        label = { Text(destination.label) }
+                    )
+                }
+            }
+        }
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding),
+            contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Mi consumo⚡",
-                style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            Spacer(Modifier.height(70.dp))
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text("conectar el dispositivo")
+            when(selectedDestination) {
+                Destination.PRINCIPAL.ordinal -> {
+                    PrincipalScreen()
+                }
+                Destination.REGISTROS.ordinal -> {
+                    RegistrosScreen()
+                }
+                Destination.EDUCACION.ordinal -> {
+                    EducacionScreen()
+                }
             }
-
-            Spacer(Modifier.height(32.dp))
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text("ver historial de consumos")
-            }
-
-            Spacer(Modifier.height(32.dp))
-
-            Text(text = "Su consumo actual es de: 0.1 A")
-
-            Spacer(Modifier.height(32.dp))
-
-
-            Button(
-                onClick = {},
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text("educación")
-            }
-
-
-
-
         }
     }
-
 }
 
 
+/**
+ * Enum que define los destinos de la barra de navegación
+ */
+enum class Destination(
+    val route: String,
+    val label: String,
+    val icon: ImageVector,
+    val descripcion: String
+){
+    PRINCIPAL("principal", "Principal", Icons.Default.EnergySavingsLeaf, "pagina principal"),
+    REGISTROS("registros", "Registros", Icons.Default.GraphicEq, "registro de datos"),
+    EDUCACION("educacion", "Educacion", Icons.Default.CastForEducation, "algunos datos educativos")
+}
 
-
-
+@Composable
+fun interfazPreview(){
+    interfazhome()
+}
